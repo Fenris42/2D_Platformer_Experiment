@@ -416,7 +416,7 @@ GameObject:
   - component: {fileID: 1053284644}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -571,6 +571,7 @@ GameObject:
   - component: {fileID: 2027552030}
   - component: {fileID: 2027552029}
   - component: {fileID: 2027552033}
+  - component: {fileID: 2027552034}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -637,10 +638,10 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0323143, y: 0.18525565}
+  m_Offset: {x: 0.04344958, y: -0.5976378}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5231198, y: 0.2035224}
+    pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 5.12, y: 2.56}
     newSize: {x: 5.12, y: 2.56}
     adaptiveTilingThreshold: 0.5
@@ -648,7 +649,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.44002628, y: 1.314193}
+  m_Size: {x: 0.5771228, y: 1.2781146}
   m_EdgeRadius: 0
 --- !u!212 &2027552031
 SpriteRenderer:
@@ -710,7 +711,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2027552028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.079, y: -4.377, z: 0.09007757}
+  m_LocalPosition: {x: -0.103, y: -3.735, z: 0.09007757}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -732,3 +733,24 @@ MonoBehaviour:
   player: {fileID: 2027552029}
   moveSpeed: 7
   jumpSpeed: 7
+--- !u!95 &2027552034
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027552028}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: efb662207406ffe4292b9afe2ba82176, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
