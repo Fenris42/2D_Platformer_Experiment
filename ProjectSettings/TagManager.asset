@@ -39,6 +39,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Skybox
+    uniqueID: 197458809
+    locked: 0
+  - name: Ground
+    uniqueID: 945444039
+    locked: 0
+  - name: Background
+    uniqueID: 2240080033
+    locked: 0
+  - name: Player
+    uniqueID: 1530557471
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

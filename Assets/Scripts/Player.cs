@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    //public variables
     public Rigidbody2D player;
     public float moveSpeed;
     public float jumpSpeed;
+
+    //private variables
     private bool isJumping;
     private Animator animator;
 
@@ -20,9 +25,16 @@ public class Player : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
+    {
+        //player movement ----------------------------------------------------------------------------
+
+        //force character to return to idle if both left and right activated
+        if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+        {
+            animator.SetBool("Running", false);
+        }
         //Move left
-        if (Input.GetKey(KeyCode.A))
+        else if (Input.GetKey(KeyCode.A))
         {
             //move player
             transform.position = transform.position + ((Vector3.left * moveSpeed) * Time.deltaTime);
@@ -45,34 +57,38 @@ public class Player : MonoBehaviour
             //change animation to running
             animator.SetBool("Running", true);
         }
+        //return sprite to idle animation
         else
         {
             animator.SetBool("Running", false);
         }
 
         //Jump
-        if (Input.GetKey(KeyCode.Space) && isJumping == false)
+        if (Input.GetKeyDown(KeyCode.Space) && isJumping == false)
         {
-            //jump
-            player.velocity = Vector2.up * jumpSpeed;
-
             //lock jump until player is on the ground
             isJumping = true;
+
+            //jump
+            player.velocity = Vector2.up * jumpSpeed;
 
             //change animation to jumping
             animator.SetBool("Jumping", true);
         }  
+        
     }
 
     //Collision Detection
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        
+
         //check if player is grounded
         if (collision.gameObject.tag == "Ground")
         {
             //Reset jump
-            isJumping = false;
             animator.SetBool("Jumping", false);
+            isJumping = false;
         }
     }
 }
