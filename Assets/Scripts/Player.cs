@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,42 +9,41 @@ public class Player : MonoBehaviour
 {
     //public variables
     public Rigidbody2D player;
+    public Animator animator;
+    public GameObject healthBarObject; //import child game object health bar
+    
+    //Player Stats
     public float moveSpeed;
     public float jumpSpeed;
     public int maxHealth;
     public int currentHealth;
-    public StatBar healthBar; //import script "StatBar"
-
 
     //private variables
     private bool isJumping;
-    private Animator animator;
-    private GameObject healthBarObject; //import child game object health bar
+    private StatBar healthBar;//import script "StatBar"
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        //import components from Player game object
-        animator = GetComponent<Animator>();
-        healthBarObject = GameObject.Find("Health Bar");
-
+        //get instance of players health bar
+        healthBar = healthBarObject.GetComponent<StatBar>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Update players movement
-        PlayerMovement();
+        //Update players movement and inputs
+        PlayerInput();
 
         //Update players health
         PlayerHealth();
           
-        
     }
 
-    //Player Movement -----------------------------------------------------------------------------------------------------------------
-    private void PlayerMovement()
+    //Player Input -----------------------------------------------------------------------------------------------------------------
+    private void PlayerInput()
     {
         //force character to return to idle if both left and right activated
         if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
@@ -98,11 +98,33 @@ public class Player : MonoBehaviour
             //change animation to jumping
             animator.SetBool("Jumping", true);
         }
+
+        //Sword attack (left mouse button)
+        if (Input.GetMouseButtonDown(0))
+        {
+            //change animation to sword attack
+            animator.SetBool("Sword_Attack", true);
+
+        }
+        else
+        {
+            animator.SetBool("Sword_Attack", false);   
+        }
     }
 
-    //Player Health
+    //Player Health -----------------------------------------------------------------------------------------------------------------
     private void PlayerHealth()
     {
+        //check to make sure players health stays within range
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+        else if (currentHealth < 0)
+        {
+            currentHealth = 0;
+        }
+
         //Update health bar
         healthBar.UpdateBar(currentHealth, maxHealth);
     }
