@@ -139,5 +139,11 @@ public class Player : MonoBehaviour
             animator.SetBool("Jumping", false);
             isJumping = false;
         }
+        
+        //player touched a mob
+        if (collision.gameObject.tag == "Mob")
+        {
+
+        }
     }
 }

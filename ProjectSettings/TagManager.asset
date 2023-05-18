@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - Heal Zone
   - Damage Zone
+  - Mob
   layers:
   - Default
   - TransparentFX
@@ -49,6 +50,9 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 2240080033
+    locked: 0
+  - name: Mob
+    uniqueID: 3777527277
     locked: 0
   - name: Player
     uniqueID: 1530557471
