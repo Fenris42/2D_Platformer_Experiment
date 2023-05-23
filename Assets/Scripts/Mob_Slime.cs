@@ -9,6 +9,7 @@ public class Mob_Slime : MonoBehaviour
     public Rigidbody2D mob;
     public Animator animator;
     public GameObject healthBarObject;
+    public Collider2D mobCollider;
 
     //Mob stats
     public float speed;
@@ -44,7 +45,7 @@ public class Mob_Slime : MonoBehaviour
 
         //Update mobs health
         MobHealth();
-        
+
         //Damage player
         MobAttack();
 
@@ -71,17 +72,41 @@ public class Mob_Slime : MonoBehaviour
 
     }
 
+    //Mob taking damage ------------------------------------------------------------------------------------
+    public void TakeDamage(int damage)
+    {
+        //apply damage to mob
+        currentHealth = currentHealth - damage;
+
+        //play hit animation
+        animator.SetTrigger("Hit");
+
+    }
     //Mob Health ------------------------------------------------------------------------------------
     private void MobHealth()
     {
-        //check to make sure players health stays within range
+        //check to make sure health stays within range
         if (currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
         }
-        else if (currentHealth < 0)
+        else if (currentHealth <= 0)
         {
-            currentHealth = 0;
+            //play death animation
+            animator.SetTrigger("Death");
+
+            //disable health bar
+            healthBarObject.SetActive(false);
+
+            //disable physics (prevents sprite from falling through floor on death)
+            mob.simulated = false;
+
+            //disable hitbox
+            mobCollider.enabled = false;
+
+            //disable script
+            this.enabled = false;
+            
         }
 
         //Update health bar

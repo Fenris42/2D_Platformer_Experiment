@@ -17,6 +17,10 @@ public class Player : MonoBehaviour
     public float jumpSpeed;
     public int maxHealth;
     public int currentHealth;
+    public float swordRange;
+    public Transform swordAttackRange;
+    public int swordAttackPower;
+    public LayerMask mobLayer;
 
     //private variables
     private bool isJumping;
@@ -102,13 +106,7 @@ public class Player : MonoBehaviour
         //Sword attack (left mouse button)
         if (Input.GetMouseButtonDown(0))
         {
-            //change animation to sword attack
-            animator.SetBool("Sword_Attack", true);
-
-        }
-        else
-        {
-            animator.SetBool("Sword_Attack", false);   
+            PlayerSwordAttack();
         }
     }
 
@@ -119,14 +117,35 @@ public class Player : MonoBehaviour
         if (currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
+
         }
-        else if (currentHealth < 0)
+        else if (currentHealth <= 0)
         {
+            //TO DO add die function
             currentHealth = 0;
         }
 
         //Update health bar
         healthBar.UpdateBar(currentHealth, maxHealth);
+    }
+
+    //Player Attack -----------------------------------------------------------------------------------------------------------------
+    private void PlayerSwordAttack()
+    {
+        //change animation to sword attack
+        animator.SetTrigger("Sword_Attack");
+
+        //detect enemies in sword range
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(swordAttackRange.position, swordRange, mobLayer);
+
+        //loop through each enemy in range
+        foreach (Collider2D enemy in enemies)
+        {
+            //damage enemy
+            //TO DO - Make dynamic and not just to slimes
+            enemy.GetComponent<Mob_Slime>().TakeDamage(swordAttackPower);
+        }
+
     }
 
     //Collision Detection -----------------------------------------------------------------------------------------------------------------
@@ -139,11 +158,18 @@ public class Player : MonoBehaviour
             animator.SetBool("Jumping", false);
             isJumping = false;
         }
-        
-        //player touched a mob
-        if (collision.gameObject.tag == "Mob")
-        {
+    }
 
+    //For Debug - Draw sword attack range in editor
+    private void OnDrawGizmosSelected()
+    {
+        //check for null value
+        if (swordAttackRange == null)
+        {
+            return;
         }
+
+        //draw circle in editor
+        Gizmos.DrawWireSphere(swordAttackRange.position, swordRange);
     }
 }
