@@ -1,2 +1,2 @@
 # 2D_Platformer_Experiment
- Testing out a Platformer in Unity
+Sandbox for testing out a platformer in Unity and experimenting with various objects and systems
