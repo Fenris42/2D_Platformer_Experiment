@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Mob_Slime : MonoBehaviour
 {
@@ -16,12 +17,16 @@ public class Mob_Slime : MonoBehaviour
     public int maxHealth;
     public int currentHealth;
     public int attack;
+    public int aggroRange;
+    public int attackRange;
 
     //private variables
     private StatBar healthBar; //import script "StatBar"
     private bool playerCollision;
     private Player player; //import script "Player"
     private float timer;
+    private float distanceToPlayer;
+    private GameLogic GameLogic;
 
     // Start is called before the first frame update
     void Start()
@@ -32,22 +37,32 @@ public class Mob_Slime : MonoBehaviour
         //access players script
         player = GameObject.Find("Player").GetComponent<Player>();
 
+        //get instance of game logic script
+        GameLogic = GameObject.Find("Game Logic").GetComponent<GameLogic>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        //incriment timer
-        timer = timer + Time.deltaTime;
+        if (GameLogic.GameOver == false)
+        {
+            //incriment timer
+            timer = timer + Time.deltaTime;
 
-        //Trigger mob AI
-        MobMovement();
+            //check distance to player
+            distanceToPlayer = Vector2.Distance(player.transform.position, transform.position);
 
-        //Update mobs health
-        MobHealth();
+            //Trigger mob AI
+            MobMovement();
 
-        //Damage player
-        MobAttack();
+            //Update mobs health
+            MobHealth();
+
+            //Damage player
+            MobAttack();
+        }
+        
 
     }
 
@@ -58,17 +73,72 @@ public class Mob_Slime : MonoBehaviour
         if (timer >= 1 && playerCollision == true)
         {
             //damage player damage per second
-            player.currentHealth = player.currentHealth - attack;
+            //player.currentHealth = player.currentHealth - attack;
+            player.DamagePlayer(attack);
 
             //reset timer
             timer = 0;
 
+        }
+        
+        //mob attack
+        if (timer >= 1 && distanceToPlayer <= attackRange)
+        {
+            //play attack animation
+            animator.SetTrigger("Attack");
+
+            //damage player
+            //player.currentHealth = player.currentHealth - attack;
+            player.DamagePlayer(attack);
+
+            //reset timer
+            timer = 0;
         }
     }
 
     //Mob Movement ------------------------------------------------------------------------------------
     private void MobMovement()
     {
+        //check if player is in aggro range but dont overlapt with player
+        if (distanceToPlayer < aggroRange && distanceToPlayer >= attackRange)
+        {
+            //player is to the left of mob
+            if (player.transform.position.x < transform.position.x)
+            {
+                //move left towards player
+                transform.position = transform.position + ((Vector3.left * speed) * Time.deltaTime);
+
+                //flip sprite left
+                transform.localScale = new Vector3(-1, 1, 1);
+
+                //prevent healthbar from flipping with player sprite
+                healthBarObject.transform.localScale = new Vector3(-1, 1, 1);
+
+                //set animation to moving
+                animator.SetBool("Run", true);
+
+            }
+            //player is to the right of mob
+            else
+            {
+                //move right towards player
+                transform.position = transform.position + ((Vector3.right * speed) * Time.deltaTime);
+
+                //flip sprite left
+                transform.localScale = new Vector3(1, 1, 1);
+
+                //prevent healthbar from flipping with player sprite
+                healthBarObject.transform.localScale = new Vector3(1, 1, 1);
+
+                //set animation to moving
+                animator.SetBool("Run", true);
+            }
+        }
+        //reset to idle animation
+        else
+        {
+            animator.SetBool("Run", false);
+        }
 
     }
 

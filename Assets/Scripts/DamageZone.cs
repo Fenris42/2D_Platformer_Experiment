@@ -30,7 +30,8 @@ public class DamageZone : MonoBehaviour
         if (timer >= 1 && playerCollision == true)
         {
             //damage player damage per second
-            player.currentHealth = player.currentHealth - damagerPerSec;
+            //player.currentHealth = player.currentHealth - damagerPerSec;
+            player.DamagePlayer(damagerPerSec);
 
             //reset timer
             timer = 0;

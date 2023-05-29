@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,7 +12,8 @@ public class Player : MonoBehaviour
     public Rigidbody2D player;
     public Animator animator;
     public GameObject healthBarObject; //import child game object health bar
-    
+    public SpriteRenderer playerSprite;
+
     //Player Stats
     public float moveSpeed;
     public float jumpSpeed;
@@ -25,6 +27,8 @@ public class Player : MonoBehaviour
     //private variables
     private bool isJumping;
     private StatBar healthBar;//import script "StatBar"
+    private GameLogic GameLogic; //import script "GameOver"
+    private bool GameOver = false;
 
 
 
@@ -33,17 +37,20 @@ public class Player : MonoBehaviour
     {
         //get instance of players health bar
         healthBar = healthBarObject.GetComponent<StatBar>();
+
+        //get instance of game logic script
+        GameLogic = GameObject.Find("Game Logic").GetComponent<GameLogic>();
     }
 
     // Update is called once per frame
     void Update()
     {
         //Update players movement and inputs
-        PlayerInput();
+        if (GameOver == false)
+        {
+            PlayerInput();
+        }
 
-        //Update players health
-        PlayerHealth();
-          
     }
 
     //Player Input -----------------------------------------------------------------------------------------------------------------
@@ -65,7 +72,7 @@ public class Player : MonoBehaviour
 
             //prevent healthbar from flipping with player sprite
             healthBarObject.transform.localScale = new Vector3(-1, 1, 1);
-            
+
             //change animation to running
             animator.SetBool("Running", true);
         }
@@ -110,7 +117,35 @@ public class Player : MonoBehaviour
         }
     }
 
-    //Player Health -----------------------------------------------------------------------------------------------------------------
+    //heal player
+    public void HealPlayer(int Health)
+    {
+        //apply healing to player
+        currentHealth = currentHealth + Health;
+
+        //play healing animation
+        animator.SetTrigger("Heal");
+
+        //update healthbar
+        PlayerHealth();
+
+    }
+
+    //damage palyer
+    public void DamagePlayer(int Damage)
+    {
+        //apply damage to player
+        currentHealth = currentHealth - Damage;
+
+        //play player damaged animation
+        animator.SetTrigger("Damaged");
+
+        //update healthbar
+        PlayerHealth();
+
+    }
+
+    //Update Player Health -----------------------------------------------------------------------------------------------------------------
     private void PlayerHealth()
     {
         //check to make sure players health stays within range
@@ -121,8 +156,19 @@ public class Player : MonoBehaviour
         }
         else if (currentHealth <= 0)
         {
-            //TO DO add die function
             currentHealth = 0;
+
+            //play die animation
+            animator.SetBool("Die", true);
+
+            //disable health bar
+            healthBarObject.SetActive(false);
+
+            //set game over
+            GameLogic.GameOver = true;
+
+            this.enabled = false;
+
         }
 
         //Update health bar

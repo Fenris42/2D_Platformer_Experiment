@@ -30,7 +30,8 @@ public class HealZone : MonoBehaviour
         if (timer >= 1 && playerCollision == true)
         {
             //heal player heal per sec
-            player.currentHealth = player.currentHealth + healPerSec;
+            //player.currentHealth = player.currentHealth + healPerSec;
+            player.HealPlayer(healPerSec);
 
             //reset timer
             timer = 0;
