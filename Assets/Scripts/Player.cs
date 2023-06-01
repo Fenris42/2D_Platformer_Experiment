@@ -95,8 +95,11 @@ public class Player : MonoBehaviour
             //flip player sprite left
             transform.localScale = new Vector3(-1, 1, 1);
 
-            //prevent healthbar from flipping with player sprite
+            //prevent health bar from flipping with player sprite
             healthBarObject.transform.localScale = new Vector3(-1, 1, 1);
+
+            //prevent mana bar from flipping with player sprite
+            manaBarObject.transform.localScale = new Vector3(-1, 1, 1);
 
             //change animation to running
             animator.SetBool("Running", true);
@@ -112,6 +115,9 @@ public class Player : MonoBehaviour
 
             //prevent healthbar from flipping with player sprite
             healthBarObject.transform.localScale = new Vector3(1, 1, 1);
+
+            //prevent mana bar from flipping with player sprite
+            manaBarObject.transform.localScale = new Vector3(1, 1, 1);
 
             //change animation to running
             animator.SetBool("Running", true);
@@ -195,6 +201,9 @@ public class Player : MonoBehaviour
             //disable health bar
             healthBarObject.SetActive(false);
 
+            //disable mana bar
+            manaBarObject.SetActive(false);
+
             //set game over
             GameLogic.GameOver = true;
 
@@ -253,7 +262,11 @@ public class Player : MonoBehaviour
     //regen mana
     private void RegenMana()
     {
-        GainMana(manaRegenRate);
+        if (currentMana < maxMana)
+        {
+            GainMana(manaRegenRate);
+        }
+        
     }
     
     //Player sword Attack -----------------------------------------------------------------------------------------------------------------
