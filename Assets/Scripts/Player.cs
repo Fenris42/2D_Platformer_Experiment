@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     public Animator animator;
     public GameObject healthBarObject; //import child game object health bar
     public SpriteRenderer playerSprite;
+    public GameObject manaBarObject;
+    public LayerMask mobLayer;
 
     //Player Stats
     public float moveSpeed;
@@ -22,13 +24,21 @@ public class Player : MonoBehaviour
     public float swordRange;
     public Transform swordAttackRange;
     public int swordAttackPower;
-    public LayerMask mobLayer;
+    public float fireballSpeed;
+    public int fireballCost;
+    public int fireballDamage;
+    public int currentMana;
+    public int maxMana;
+    public int manaRegenRate;
+
 
     //private variables
     private bool isJumping;
     private StatBar healthBar;//import script "StatBar"
+    private StatBar manaBar; //import script "StatBar"
     private GameLogic GameLogic; //import script "GameOver"
     private bool GameOver = false;
+    private float timer;
 
 
 
@@ -37,6 +47,9 @@ public class Player : MonoBehaviour
     {
         //get instance of players health bar
         healthBar = healthBarObject.GetComponent<StatBar>();
+
+        //get instance of players mana bar
+        manaBar = manaBarObject.GetComponent<StatBar>();
 
         //get instance of game logic script
         GameLogic = GameObject.Find("Game Logic").GetComponent<GameLogic>();
@@ -48,9 +61,21 @@ public class Player : MonoBehaviour
         //Update players movement and inputs
         if (GameOver == false)
         {
+            //check for and apply players keyboard/mouse inputs
             PlayerInput();
-        }
 
+            //increment timer
+            timer = timer + Time.deltaTime;
+
+            //convert frames to seconds
+            if (timer >= 1)
+            {
+                RegenMana();
+
+                //reset timer
+                timer = 0;
+            }
+        }
     }
 
     //Player Input -----------------------------------------------------------------------------------------------------------------
@@ -115,6 +140,12 @@ public class Player : MonoBehaviour
         {
             PlayerSwordAttack();
         }
+
+        //fireball attack (right mouse button)
+        if (Input.GetMouseButtonDown(1))
+        {
+            PlayerFireballAttack();
+        }
     }
 
     //heal player
@@ -175,7 +206,57 @@ public class Player : MonoBehaviour
         healthBar.UpdateBar(currentHealth, maxHealth);
     }
 
-    //Player Attack -----------------------------------------------------------------------------------------------------------------
+    //gain mana
+    private void GainMana(int Mana)
+    {
+        //keep mana in range
+        if (currentMana > maxMana)
+        {
+            currentMana = maxMana;
+        }
+        else if ((currentMana + Mana) > maxMana)
+        {
+            currentMana = maxMana;
+        }
+        //apply mana
+        else
+        {
+            currentMana = currentMana + Mana;
+        }
+
+        //Update mana bar
+        manaBar.UpdateBar(currentMana, maxMana);
+    }
+
+    //use mana
+    private void UseMana(int Mana)
+    {
+        //keep mana in range
+        if (currentMana < 0)
+        {
+            currentMana = 0;
+        }
+        else if((currentMana - Mana) < 0)
+        {
+            currentMana = 0;
+        }
+        //consume mana
+        else
+        {
+            currentMana = currentMana - Mana;
+        }
+
+        //Update mana bar
+        manaBar.UpdateBar(currentMana, maxMana);
+    }
+
+    //regen mana
+    private void RegenMana()
+    {
+        GainMana(manaRegenRate);
+    }
+    
+    //Player sword Attack -----------------------------------------------------------------------------------------------------------------
     private void PlayerSwordAttack()
     {
         //change animation to sword attack
@@ -192,6 +273,24 @@ public class Player : MonoBehaviour
             enemy.GetComponent<Mob_Slime>().TakeDamage(swordAttackPower);
         }
 
+    }
+
+    //player fireball attack -----------------------------------------------------------------------------------------------------------------
+    private void PlayerFireballAttack()
+    {
+        //check if enough mana
+        if (currentMana >= fireballCost)
+        {
+            //change animation to casting
+            animator.SetTrigger("Cast");
+
+            //use mana
+            UseMana(fireballCost);
+        }
+        
+
+
+        
     }
 
     //Collision Detection -----------------------------------------------------------------------------------------------------------------
