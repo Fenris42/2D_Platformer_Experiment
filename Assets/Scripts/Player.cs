@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     public SpriteRenderer playerSprite;
     public GameObject manaBarObject;
     public LayerMask mobLayer;
+    public GameObject fireballPrefab;
 
     //Player Stats
     public float moveSpeed;
@@ -24,12 +25,13 @@ public class Player : MonoBehaviour
     public float swordRange;
     public Transform swordAttackRange;
     public int swordAttackPower;
-    public float fireballSpeed;
+    public int fireballSpeed;
     public int fireballCost;
     public int fireballDamage;
     public int currentMana;
     public int maxMana;
     public int manaRegenRate;
+    
 
 
     //private variables
@@ -299,11 +301,17 @@ public class Player : MonoBehaviour
 
             //use mana
             UseMana(fireballCost);
+
+            //spawn position
+            float x = (float)(transform.position.x + 0.5); //offset fireball to be not centered on player
+            float y = (float)(transform.position.y - 0.7); //offset fireball to be towards hands
+
+            //spawn fireball
+            Instantiate(fireballPrefab, new Vector3(x, y), transform.rotation);
+
+
+
         }
-        
-
-
-        
     }
 
     //Collision Detection -----------------------------------------------------------------------------------------------------------------
