@@ -9,11 +9,10 @@ public class GameLogic : MonoBehaviour
     public bool GameOver = false;
     public GameObject GameOverUI;
 
-
-
     // Start is called before the first frame update
     void Start()
     {
+
 
     }
 

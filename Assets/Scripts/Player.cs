@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     public GameObject manaBarObject;
     public LayerMask mobLayer;
     public GameObject fireballPrefab;
+    [SerializeField]
+    public Inventory inventory;
 
     //Player Stats
     public float moveSpeed;
@@ -31,7 +33,8 @@ public class Player : MonoBehaviour
     public int currentMana;
     public int maxMana;
     public int manaRegenRate;
-    
+    public int inventorySize;
+
 
 
     //private variables
@@ -41,6 +44,7 @@ public class Player : MonoBehaviour
     private GameLogic GameLogic; //import script "GameOver"
     private bool GameOver = false;
     private float timer;
+    
 
 
 
@@ -55,6 +59,9 @@ public class Player : MonoBehaviour
 
         //get instance of game logic script
         GameLogic = GameObject.Find("Game Logic").GetComponent<GameLogic>();
+
+        //initialize inventory
+        inventory.InitializeInventory(inventorySize);
     }
 
     // Update is called once per frame
@@ -153,6 +160,19 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             PlayerFireballAttack();
+        }
+
+        //open inventory
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (inventory.isOpen == false)
+            {
+                inventory.Show();
+            }
+            else
+            {
+                inventory.Hide();
+            }
         }
     }
 
@@ -283,8 +303,13 @@ public class Player : MonoBehaviour
         //loop through each enemy in range
         foreach (Collider2D enemy in enemies)
         {
+
+            Debug.Log("I hit a slime");
+
             //damage enemy
+            //
             //TO DO - Make dynamic and not just to slimes
+            //
             enemy.GetComponent<Mob_Slime>().TakeDamage(swordAttackPower);
         }
 
