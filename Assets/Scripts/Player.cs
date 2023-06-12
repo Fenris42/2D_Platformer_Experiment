@@ -42,7 +42,6 @@ public class Player : MonoBehaviour
     private StatBar healthBar;//import script "StatBar"
     private StatBar manaBar; //import script "StatBar"
     private GameLogic GameLogic; //import script "GameOver"
-    private bool GameOver = false;
     private float timer;
     
 
@@ -68,21 +67,27 @@ public class Player : MonoBehaviour
     void Update()
     {
         //Update players movement and inputs
-        if (GameOver == false)
+        if (GameLogic.GameOver == false)
         {
-            //check for and apply players keyboard/mouse inputs
-            PlayerInput();
+            //check for menu/UI inputs
+            PlayerMenuInput();
 
-            //increment timer
-            timer = timer + Time.deltaTime;
-
-            //convert frames to seconds
-            if (timer >= 1)
+            if (GameLogic.GamePaused == false)
             {
-                RegenMana();
+                //check for and apply players movement and attack inputs
+                PlayerInput();
 
-                //reset timer
-                timer = 0;
+                //increment timer
+                timer = timer + Time.deltaTime;
+
+                //convert frames to seconds
+                if (timer >= 1)
+                {
+                    RegenMana();
+
+                    //reset timer
+                    timer = 0;
+                }
             }
         }
     }
@@ -162,6 +167,12 @@ public class Player : MonoBehaviour
             PlayerFireballAttack();
         }
 
+        
+    }
+
+    //menu inputs
+    public void PlayerMenuInput()
+    {
         //open inventory
         if (Input.GetKeyDown(KeyCode.I))
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,13 @@ public class Inventory : MonoBehaviour
     public RectTransform itemPanel;
     public bool isOpen = false;
     public GameObject menuTitle;
+    public GameLogic gameLogic;
+    public Inventory_Description itemDescription;
+    public Sprite image;
+    public int quantity;
+    public string title;
+    public string description;
+    public MouseFollower mouseFollower;
 
     List<Inventory_Item> items = new List<Inventory_Item>();
 
@@ -16,7 +24,9 @@ public class Inventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        itemDescription.ResetDescription();
+        mouseFollower.Toggle(false);
+
     }
 
     // Update is called once per frame
@@ -42,7 +52,50 @@ public class Inventory : MonoBehaviour
 
             //add inventory slot to list
             items.Add(item);
+
+            item.OnItemClicked += HandleItemSelection;
+            item.OnItemBeginDrag += HandleBeginDrag;
+            item.OnItemDroppedOn += HandleSwap;
+            item.OnItemEndDrag += HandleEndDrag;
+            item.OnRightMouseBtnClick += HandleShowItemActions;
         }
+
+        ////////////////////////////////////////////
+        //debug purposes only - starting inventory//
+        ////////////////////////////////////////////
+        items[0].SetData(image, quantity);
+    }
+
+    private void HandleShowItemActions(Inventory_Item item)
+    {
+        
+    }
+
+    private void HandleEndDrag(Inventory_Item item)
+    {
+        mouseFollower.Toggle(false);
+    }
+
+    private void HandleSwap(Inventory_Item item)
+    {
+        
+    }
+
+    private void HandleBeginDrag(Inventory_Item item)
+    {
+        mouseFollower.Toggle(true);
+        mouseFollower.SetData(image, quantity);
+    }
+
+    private void HandleItemSelection(Inventory_Item item)
+    {
+        itemDescription.SetDescription(image, title, description);
+
+        ///////////////////////////
+        //for debug purposes only//
+        ///////////////////////////
+        items[0].Select();
+
     }
 
     //display inventory window
@@ -56,6 +109,18 @@ public class Inventory : MonoBehaviour
 
         //dispaly menu category
         menuTitle.SetActive(true);
+
+        //pause game
+        gameLogic.PauseGame(true);
+
+        itemDescription.ResetDescription();
+
+        ///////////////////////////
+        //for debug purposes only//
+        ///////////////////////////
+        items[0].Deselect();
+        
+
     }
 
     //close inventory window
@@ -69,5 +134,8 @@ public class Inventory : MonoBehaviour
 
         //hide menu category
         menuTitle.SetActive(false);
+
+        //unpause game
+        gameLogic.PauseGame(false);
     }
 }
