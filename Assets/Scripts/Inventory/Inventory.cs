@@ -5,21 +5,24 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    //public variables
     public Inventory_Item itemPrefab;
     public RectTransform itemPanel;
     public bool isOpen = false;
     public GameObject menuTitle;
     public GameLogic gameLogic;
     public Inventory_Description itemDescription;
-    public Sprite image;
-    public int quantity;
-    public string title;
-    public string description;
     public MouseFollower mouseFollower;
 
+    //private variables
+    private int currentlyDraggedItemIndex = -1;
+
+    //inventory array
     List<Inventory_Item> items = new List<Inventory_Item>();
 
-
+    //events
+    public event Action<int> OnDescriptionRequested, OnItemActionRequested, OnStartDragging;
+    public event Action<int, int> OnSwapItems;
 
     // Start is called before the first frame update
     void Start()
@@ -60,10 +63,14 @@ public class Inventory : MonoBehaviour
             item.OnRightMouseBtnClick += HandleShowItemActions;
         }
 
-        ////////////////////////////////////////////
-        //debug purposes only - starting inventory//
-        ////////////////////////////////////////////
-        items[0].SetData(image, quantity);
+    }
+
+    public void UpdateData(int itemIndex, Sprite itemImage, int itemQuantity)
+    {
+        if (items.Count > itemIndex)
+        {
+            items[itemIndex].SetData(itemImage, itemQuantity);
+        }
     }
 
     private void HandleShowItemActions(Inventory_Item item)
@@ -73,29 +80,54 @@ public class Inventory : MonoBehaviour
 
     private void HandleEndDrag(Inventory_Item item)
     {
-        mouseFollower.Toggle(false);
+        ResetDraggedItem();
     }
 
     private void HandleSwap(Inventory_Item item)
     {
+        int index = items.IndexOf(item);
+        if (index == -1)
+        {
+            return;
+        }
+
+        OnSwapItems?.Invoke(currentlyDraggedItemIndex, index);
         
     }
 
     private void HandleBeginDrag(Inventory_Item item)
     {
-        mouseFollower.Toggle(true);
-        mouseFollower.SetData(image, quantity);
+        int index = items.IndexOf(item);
+        if (index == -1)
+        {
+            return;
+        }
+
+        HandleItemSelection(item);
+        OnStartDragging?.Invoke(index);
+    }
+
+    public void CreateDraggedItem(Sprite sprite, int quantity)
+    {
+
     }
 
     private void HandleItemSelection(Inventory_Item item)
     {
-        itemDescription.SetDescription(image, title, description);
+        int index = items.IndexOf(item);
+        if (index == -1)
+        {
+            return;
+        }
 
-        ///////////////////////////
-        //for debug purposes only//
-        ///////////////////////////
-        items[0].Select();
+        OnDescriptionRequested?.Invoke(index);
 
+    }
+
+    private void ResetDraggedItem()
+    {
+        mouseFollower.Toggle(false);
+        currentlyDraggedItemIndex = -1;
     }
 
     //display inventory window
@@ -113,13 +145,23 @@ public class Inventory : MonoBehaviour
         //pause game
         gameLogic.PauseGame(true);
 
-        itemDescription.ResetDescription();
+        ResetSelection();
 
-        ///////////////////////////
-        //for debug purposes only//
-        ///////////////////////////
-        items[0].Deselect();
-        
+    }
+
+    private void ResetSelection()
+    {
+        itemDescription.ResetDescription();
+        DeselectAllItems();
+
+    }
+
+    private void DeselectAllItems()
+    {
+        foreach (Inventory_Item item in items)
+        {
+            item.Deselect();
+        }
 
     }
 
@@ -137,5 +179,7 @@ public class Inventory : MonoBehaviour
 
         //unpause game
         gameLogic.PauseGame(false);
+
+        ResetDraggedItem();
     }
 }

@@ -16,8 +16,6 @@ public class Player : MonoBehaviour
     public GameObject manaBarObject;
     public LayerMask mobLayer;
     public GameObject fireballPrefab;
-    [SerializeField]
-    public Inventory inventory;
 
     //Player Stats
     public float moveSpeed;
@@ -33,9 +31,6 @@ public class Player : MonoBehaviour
     public int currentMana;
     public int maxMana;
     public int manaRegenRate;
-    public int inventorySize;
-
-
 
     //private variables
     private bool isJumping;
@@ -59,8 +54,6 @@ public class Player : MonoBehaviour
         //get instance of game logic script
         GameLogic = GameObject.Find("Game Logic").GetComponent<GameLogic>();
 
-        //initialize inventory
-        inventory.InitializeInventory(inventorySize);
     }
 
     // Update is called once per frame
@@ -69,9 +62,6 @@ public class Player : MonoBehaviour
         //Update players movement and inputs
         if (GameLogic.GameOver == false)
         {
-            //check for menu/UI inputs
-            PlayerMenuInput();
-
             if (GameLogic.GamePaused == false)
             {
                 //check for and apply players movement and attack inputs
@@ -168,23 +158,6 @@ public class Player : MonoBehaviour
         }
 
         
-    }
-
-    //menu inputs
-    public void PlayerMenuInput()
-    {
-        //open inventory
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            if (inventory.isOpen == false)
-            {
-                inventory.Show();
-            }
-            else
-            {
-                inventory.Hide();
-            }
-        }
     }
 
     //heal player
