@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -91,11 +92,14 @@ public class Inventory_Item : MonoBehaviour, IPointerClickHandler, IBeginDragHan
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        
         OnItemEndDrag?.Invoke(this);
+
     }
 
     public void OnDrop(PointerEventData eventData)
     {
+        
         OnItemDroppedOn?.Invoke(this);
     }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 [CreateAssetMenu]
 public class InventorySO : ScriptableObject
@@ -9,6 +10,7 @@ public class InventorySO : ScriptableObject
     [SerializeField] private List<InventoryItem> inventoryItems;
     [field: SerializeField] public int Size { get; private set; } = 10;
 
+    public event Action<Dictionary<int, InventoryItem>> OnInventoryUpdated;
 
 
     public void Initialize()
@@ -20,19 +22,91 @@ public class InventorySO : ScriptableObject
         }
     }
 
-    public void AddItem(ItemSO item, int quantity)
+    public int AddItem(ItemSO item, int quantity)
+    {
+        if (item.IsStackable == false)
+        {
+            for (int i = 0; i < inventoryItems.Count; i++)
+            {
+                while (quantity > 0 && IsInventoryFull() == false)
+                {
+                    quantity -= AddItemToFirstFreeSlot(item, 1);
+                    
+                }
+
+                InformAboutChange();
+                return quantity;
+            }
+        }
+        quantity = AddStackableItem(item, quantity);
+        InformAboutChange();
+        return quantity;
+        
+    }
+
+    private int AddItemToFirstFreeSlot(ItemSO item, int quantity)
+    {
+        InventoryItem newItem = new InventoryItem
+        {
+            item = item,
+            quantity = quantity,
+        };
+
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            if (inventoryItems[i].IsEmpty == true)
+            {
+                inventoryItems[i] = newItem;
+                return quantity;
+            }
+        }
+        return 0;
+    }
+
+    private bool IsInventoryFull()
+        => inventoryItems.Where(item => item.IsEmpty).Any() == false;
+
+    private int AddStackableItem(ItemSO item, int quantity)
     {
         for (int i = 0; i < inventoryItems.Count; i++)
         {
-            if (inventoryItems[i].IsEmpty)
+            if (inventoryItems[i].IsEmpty == true)
             {
-                inventoryItems[i] = new InventoryItem
+                continue;
+            }
+
+            if (inventoryItems[i].item.ID == item.ID)
+            {
+                int amountPossibleToTake = inventoryItems[i].item.MaxStackSize - inventoryItems[i].quantity;
+
+                if (quantity > amountPossibleToTake)
                 {
-                    item = item,
-                    quantity = quantity
-                };
-            } 
+                    inventoryItems[i] = inventoryItems[i].ChangeQuantity(inventoryItems[i].item.MaxStackSize);
+                    quantity -= amountPossibleToTake;
+                }
+                else
+                {
+                    inventoryItems[i] = inventoryItems[i].ChangeQuantity(inventoryItems[i].quantity + quantity);
+                    InformAboutChange();
+                    return 0;
+                }
+            }
         }
+        
+        while (quantity > 0 && IsInventoryFull() == false)
+        {
+            int newQuantity = Mathf.Clamp(quantity, 0, item.MaxStackSize);
+            quantity -= newQuantity;
+
+            AddItemToFirstFreeSlot(item, newQuantity);
+        }
+
+        return quantity;
+    }
+
+    public void AddItem(InventoryItem item)
+    {
+        AddItem(item.item, item.quantity);
     }
 
     public Dictionary<int, InventoryItem> GetCurrentInventoryState()
@@ -50,6 +124,25 @@ public class InventorySO : ScriptableObject
         }
 
         return returnValue;
+    }
+
+    public InventoryItem GetItemAt(int itemIndex)
+    {
+        return inventoryItems[itemIndex];
+    }
+
+    public void SwapItems(int itemIndex_1, int itemIndex_2)
+    {
+
+        InventoryItem item1 = inventoryItems[itemIndex_1];
+        inventoryItems[itemIndex_1] = inventoryItems[itemIndex_2];
+        inventoryItems[itemIndex_2] = item1;
+        InformAboutChange();
+    }
+
+    private void InformAboutChange()
+    {
+        OnInventoryUpdated?.Invoke(GetCurrentInventoryState());
     }
 }
 

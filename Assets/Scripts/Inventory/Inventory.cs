@@ -90,26 +90,28 @@ public class Inventory : MonoBehaviour
         {
             return;
         }
-
         OnSwapItems?.Invoke(currentlyDraggedItemIndex, index);
-        
+        HandleItemSelection(item);
+
     }
 
     private void HandleBeginDrag(Inventory_Item item)
     {
+        
         int index = items.IndexOf(item);
         if (index == -1)
         {
             return;
         }
-
+        currentlyDraggedItemIndex = index;
         HandleItemSelection(item);
         OnStartDragging?.Invoke(index);
     }
 
     public void CreateDraggedItem(Sprite sprite, int quantity)
     {
-
+        mouseFollower.Toggle(true);
+        mouseFollower.SetData(sprite, quantity);
     }
 
     private void HandleItemSelection(Inventory_Item item)
@@ -149,7 +151,7 @@ public class Inventory : MonoBehaviour
 
     }
 
-    private void ResetSelection()
+    public void ResetSelection()
     {
         itemDescription.ResetDescription();
         DeselectAllItems();
@@ -181,5 +183,21 @@ public class Inventory : MonoBehaviour
         gameLogic.PauseGame(false);
 
         ResetDraggedItem();
+    }
+
+    internal void UpdateDescription(int itemIndex, Sprite itemImage, string name, string description)
+    {
+        itemDescription.SetDescription(itemImage, name, description);
+        DeselectAllItems();
+        items[itemIndex].Select();
+    }
+
+    internal void ResetAllItems()
+    {
+        foreach (var item in items)
+        {
+            item.ResetData();
+            item.Deselect();
+        }
     }
 }

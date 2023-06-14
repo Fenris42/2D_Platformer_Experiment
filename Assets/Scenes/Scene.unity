@@ -8019,8 +8019,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3548682f17a3fa4ea2b5a8fd9747794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 483307127}
-  inventorySize: 30
+  inventoryUI: {fileID: 483307127}
+  inventoryData: {fileID: 11400000, guid: 9652416a2d1d6cd4d8f6961461c6591f, type: 2}
+  initialItems:
+  - quantity: 5
+    item: {fileID: 11400000, guid: 7973e2a47c8ed20448d081e824ec9cd1, type: 2}
+  - quantity: 0
+    item: {fileID: 0}
+  - quantity: 1
+    item: {fileID: 11400000, guid: 319c8fa453198f742b829b286d0223e9, type: 2}
+  - quantity: 2
+    item: {fileID: 11400000, guid: 7973e2a47c8ed20448d081e824ec9cd1, type: 2}
 --- !u!1 &2042622748
 GameObject:
   m_ObjectHideFlags: 0
