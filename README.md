@@ -20,11 +20,12 @@ Iventory Use = Drag and drop item to move, right mouse button for actions </br>
   <li>Sound Effects</li>
   <li>Health/Mana UI Elements</li>
   <li>Mobs</li>
-  <li>Player Attacks</li>
+  <li>Player Attacks (Melee and Ranged)</li>
   <li>Mob Attack</li>
   <li>Mob Player Tracking</li>
   <li>Mob Loot</li>
   <li>Player Inventory</li>
   <li>Game States (Game Over, Pause, Resume)</li>
   <li>Game Over Screen Menu</li>
+  <li>Prefabs</li>
 </ul>
