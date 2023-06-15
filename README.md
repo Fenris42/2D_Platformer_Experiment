@@ -1,5 +1,5 @@
 # 2D_Platformer_Experiment
-Sandbox for testing out a platformer in Unity and experimenting with various objects and systems </br>
+Sandbox for testing out a platformer/RPG in Unity and experimenting with various objects and systems </br>
 </br>
 <b>To Play:</b></br>
 Go to Releases and download 2D_Platformer_Experiment.zip from latest release version </br>
