@@ -1,4 +1,4 @@
-# 2D_Platformer_Experiment
+# 2D Platformer/RPG Experiment
 Sandbox for testing out a platformer/RPG in Unity and experimenting with various objects and systems </br>
 </br>
 <b>To Play:</b></br>
