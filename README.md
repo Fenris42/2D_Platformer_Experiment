@@ -13,7 +13,7 @@ Fireball Attack = Right Mouse Button </br>
 Inventory = I </br>
 Iventory Use = Drag and drop item to move, right mouse button for actions </br>
 </br>
-<b>Game Elements: </b></br>
+<b>Game Elements: </b>
 <ul>
   <li>Player Movement</li>
   <li>Animation</li>
