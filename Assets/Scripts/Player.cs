@@ -73,7 +73,7 @@ public class Player : MonoBehaviour
                 //convert frames to seconds
                 if (timer >= 1)
                 {
-                    RegenMana();
+                    //RegenMana();
 
                     //reset timer
                     timer = 0;
@@ -222,7 +222,7 @@ public class Player : MonoBehaviour
     }
 
     //gain mana
-    private void GainMana(int Mana)
+    public void GainMana(int Mana)
     {
         //keep mana in range
         if (currentMana > maxMana)
@@ -244,7 +244,7 @@ public class Player : MonoBehaviour
     }
 
     //use mana
-    private void UseMana(int Mana)
+    public void UseMana(int Mana)
     {
         //keep mana in range
         if (currentMana < 0)

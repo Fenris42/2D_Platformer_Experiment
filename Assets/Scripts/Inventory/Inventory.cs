@@ -13,9 +13,11 @@ public class Inventory : MonoBehaviour
     public GameLogic gameLogic;
     public Inventory_Description itemDescription;
     public MouseFollower mouseFollower;
+    
 
     //private variables
     private int currentlyDraggedItemIndex = -1;
+    [SerializeField] private ItemActionPanel actionPanel;
 
     //inventory array
     List<Inventory_Item> items = new List<Inventory_Item>();
@@ -75,7 +77,12 @@ public class Inventory : MonoBehaviour
 
     private void HandleShowItemActions(Inventory_Item item)
     {
-        
+        int index = items.IndexOf(item);
+        if (index == -1)
+        {
+            return;
+        }
+        OnItemActionRequested?.Invoke(index);
     }
 
     private void HandleEndDrag(Inventory_Item item)
@@ -165,6 +172,21 @@ public class Inventory : MonoBehaviour
             item.Deselect();
         }
 
+        actionPanel.Toggle(false);
+
+    }
+
+    public void ShowItemAction(int itemIndex)
+    {
+        actionPanel.Toggle(true);
+        actionPanel.transform.position = items[itemIndex].transform.position;
+
+    }
+
+    public void AddAction(string actionname, Action performAction)
+    {
+        actionPanel.AddButton(actionname, performAction);
+
     }
 
     //close inventory window
@@ -183,6 +205,7 @@ public class Inventory : MonoBehaviour
         gameLogic.PauseGame(false);
 
         ResetDraggedItem();
+        actionPanel.Toggle(false);
     }
 
     internal void UpdateDescription(int itemIndex, Sprite itemImage, string name, string description)

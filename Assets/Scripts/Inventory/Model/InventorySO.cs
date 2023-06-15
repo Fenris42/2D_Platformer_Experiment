@@ -144,6 +144,31 @@ public class InventorySO : ScriptableObject
     {
         OnInventoryUpdated?.Invoke(GetCurrentInventoryState());
     }
+
+    public void RemoveItem(int itemIndex, int amount)
+    {
+        if (inventoryItems.Count > itemIndex)
+        {
+            if (inventoryItems[itemIndex].IsEmpty)
+            {
+                return;
+            }
+
+            int remander = inventoryItems[itemIndex].quantity - amount;
+
+            if (remander <= 0)
+            {
+                inventoryItems[itemIndex] = InventoryItem.GetEmptyItem();
+            }
+            else
+            {
+                inventoryItems[itemIndex] = inventoryItems[itemIndex].ChangeQuantity(remander);
+
+            }
+
+            InformAboutChange();
+        }
+    }
 }
 
 [Serializable]
