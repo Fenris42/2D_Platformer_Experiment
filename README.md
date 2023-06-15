@@ -11,7 +11,7 @@ Jump = Space </br>
 Sword Attack = Left Mouse Button </br>
 Fireball Attack = Right Mouse Button </br>
 Inventory = I </br>
-Iventory Use = Drag and drop item to move, right mouse button for actions </br>
+Inventory Use = Drag and drop item to move, right mouse button for actions </br>
 </br>
 <b>Game Elements: </b>
 <ul>
