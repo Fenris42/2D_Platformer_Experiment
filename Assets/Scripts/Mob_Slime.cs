@@ -19,6 +19,8 @@ public class Mob_Slime : MonoBehaviour
     public int attack;
     public int aggroRange;
     public int attackRange;
+    public Item lootPrefab;
+    public ItemSO loot;
 
     //private variables
     private StatBar healthBar; //import script "StatBar"
@@ -173,6 +175,18 @@ public class Mob_Slime : MonoBehaviour
 
             //disable hitbox
             mobCollider.enabled = false;
+
+            //drop loot ----------
+            //spawn position
+            float xCoord = (float)(transform.position.x + 0);
+            float yCoord = (float)(transform.position.y - 0);
+
+            //set loot
+            lootPrefab.InventoryItem = loot;
+            lootPrefab.Quantity = 1;
+
+            //spawn loot
+            Instantiate(lootPrefab, new Vector3(xCoord, yCoord), transform.rotation);
 
             //disable script
             this.enabled = false;

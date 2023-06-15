@@ -2662,6 +2662,8 @@ MonoBehaviour:
   attack: 1
   aggroRange: 5
   attackRange: 2
+  lootPrefab: {fileID: 7200195059796926700, guid: 8b3627e06c7ca464aa012c16ad4765a0, type: 3}
+  loot: {fileID: 11400000, guid: 7973e2a47c8ed20448d081e824ec9cd1, type: 2}
 --- !u!95 &751233472
 Animator:
   serializedVersion: 5
@@ -6297,6 +6299,8 @@ MonoBehaviour:
   attack: 1
   aggroRange: 5
   attackRange: 2
+  lootPrefab: {fileID: 7200195059796926700, guid: 8b3627e06c7ca464aa012c16ad4765a0, type: 3}
+  loot: {fileID: 11400000, guid: 319c8fa453198f742b829b286d0223e9, type: 2}
 --- !u!95 &1652253245
 Animator:
   serializedVersion: 5
@@ -7804,6 +7808,7 @@ GameObject:
   - component: {fileID: 2027552034}
   - component: {fileID: 2027552033}
   - component: {fileID: 2027552035}
+  - component: {fileID: 2027552036}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -8021,15 +8026,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryUI: {fileID: 483307127}
   inventoryData: {fileID: 11400000, guid: 9652416a2d1d6cd4d8f6961461c6591f, type: 2}
-  initialItems:
-  - quantity: 5
-    item: {fileID: 11400000, guid: 7973e2a47c8ed20448d081e824ec9cd1, type: 2}
-  - quantity: 0
-    item: {fileID: 0}
-  - quantity: 1
-    item: {fileID: 11400000, guid: 319c8fa453198f742b829b286d0223e9, type: 2}
-  - quantity: 2
-    item: {fileID: 11400000, guid: 7973e2a47c8ed20448d081e824ec9cd1, type: 2}
+  InventorySize: 10
+  initialItems: []
+--- !u!114 &2027552036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027552028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e195a9428f9b1d49b910c7815bc6288, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryData: {fileID: 11400000, guid: 9652416a2d1d6cd4d8f6961461c6591f, type: 2}
 --- !u!1 &2042622748
 GameObject:
   m_ObjectHideFlags: 0

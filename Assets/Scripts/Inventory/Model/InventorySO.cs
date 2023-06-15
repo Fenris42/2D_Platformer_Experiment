@@ -8,7 +8,7 @@ using System.Linq;
 public class InventorySO : ScriptableObject
 {
     [SerializeField] private List<InventoryItem> inventoryItems;
-    [field: SerializeField] public int Size { get; private set; } = 10;
+    [field: SerializeField] public int Size { get; set; }
 
     public event Action<Dictionary<int, InventoryItem>> OnInventoryUpdated;
 

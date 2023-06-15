@@ -8,6 +8,7 @@ public class Inventory_Controller : MonoBehaviour
     //public variables
     public Inventory inventoryUI;
     public InventorySO inventoryData;
+    public int InventorySize;
     
     //debug
     public List<InventoryItem> initialItems = new List<InventoryItem>();
@@ -24,6 +25,7 @@ public class Inventory_Controller : MonoBehaviour
 
     private void PrepareInventoryData()
     {
+        inventoryData.Size = InventorySize;
         inventoryData.Initialize();
         inventoryData.OnInventoryUpdated += UpdateInventoryUI;
 

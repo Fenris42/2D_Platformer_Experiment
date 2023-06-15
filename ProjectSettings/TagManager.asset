@@ -9,6 +9,7 @@ TagManager:
   - Damage Zone
   - Mob
   - Scene Edge
+  - Item
   layers:
   - Default
   - TransparentFX

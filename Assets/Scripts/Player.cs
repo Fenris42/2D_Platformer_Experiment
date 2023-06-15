@@ -287,9 +287,6 @@ public class Player : MonoBehaviour
         //loop through each enemy in range
         foreach (Collider2D enemy in enemies)
         {
-
-            Debug.Log("I hit a slime");
-
             //damage enemy
             //
             //TO DO - Make dynamic and not just to slimes
