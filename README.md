@@ -29,3 +29,10 @@ Inventory Use = Drag and drop item to move, right mouse button for actions </br>
   <li>Game Over Screen Menu</li>
   <li>Prefabs</li>
 </ul>
+</br>
+<b>Gameplay Video:</b></br>
+
+
+
+https://github.com/Fenris42/2D_Platformer_Experiment/assets/133166853/5783d41f-97a6-4dca-9e67-dffec243581b
+
